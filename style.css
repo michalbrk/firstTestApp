@@ -1,0 +1,11 @@
+body {
+    background-color: blueviolet;
+    font-size: 1.5em;
+    color: #fff;
+    padding-left: 37%;
+}
+
+canvas {
+    border: 3px solid #fff;
+    height: 80vh;
+}
