@@ -45,6 +45,7 @@ function createMatrix(w, h) {
     return matrix;
 }
 
+//Creation of pieces of different type
 function createPiece(type) {
     if(type === 'T') {
         return [
@@ -98,6 +99,7 @@ function draw() {
     context.fillStyle = '#000';
     context.fillRect(0,0, canvas.width, canvas.height);
     
+    //Makes sure that dropping blocks don't disappear
     drawMatrix(arena, { x: 0, y: 0 });
     drawMatrix(player.matrix, player.pos);
 }
@@ -125,6 +127,8 @@ function merge(arena, player) {
     });
 }
 
+//Setting the player back to the top
+//when the piece hits the bottom next one starts
 function playerDrop() {
     player.pos.y++;
     if(colide(arena, player)) {
@@ -137,6 +141,8 @@ function playerDrop() {
     dropCounter = 0;
 }
 
+//Prevent blocks from going out of the scope of the arena's
+//left and right side by moving them in the other direction
 function playerMove(dir) {
     player.pos.x += dir;
     if(colide(arena, player)) {
@@ -144,11 +150,15 @@ function playerMove(dir) {
     }
 }
 
+//Getting the random block to be created during the game
 function playerReset() {
     const pieces = 'ILJOTSZ';
     player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
     player.pos.y = 0;
-    player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length /2 |0);
+    player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 |0);
+    
+    //If the block element hits the upper wall
+    //game is over and the arena is cleared
     if(colide(arena, player)) {
         arena.forEach(row => row.fill(0));
         player.score = 0;
@@ -160,6 +170,9 @@ function playerRotate(dir) {
     const pos = player.pos.x;
     let offset = 1;
     rotate(player.matrix, dir);
+    
+    //Preventing the blocks from exiting arena while
+    //rotating next to the arena walls
     while(colide(arena, player)) {
         player.pos.x += offset;
         offset = -(offset + (offset > 0 ? 1 : -1));
@@ -171,6 +184,7 @@ function playerRotate(dir) {
     }
 }
 
+//Rotating blocks by switching the position of their elements
 function rotate(matrix, dir) {
     for(let y = 0; y < matrix.length; ++y) {
         for(let x = 0; x < y; ++x) {
@@ -232,7 +246,8 @@ const player = {
     score: 0
 }
 
-//Setting the keybord keys that are responsible for block movement
+//Setting the keybord keys that are responsible for blocks movement
+//and rotation
 document.addEventListener('keydown', event => {
     if(event.keyCode === 37) {
         playerMove(-1);
