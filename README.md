@@ -1,2 +1,2 @@
 # firstTestApp
-ToDo list App - testing and learning JavaScript
+Tetris game - testing and learning JavaScript
