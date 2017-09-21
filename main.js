@@ -5,17 +5,29 @@ const context = canvas.getContext('2d');
 //Scaling the game's block elements to be visible
 context.scale(20, 20);
 
+
+//Getting rid of the fully populated rows
+//so that the game will go on
 function arenaSweep() {
     let rowCount = 1;
+    
+    //Check for the empty spaces in the blocks
+    //in general
     outer: for(let y = arena.length - 1; y > 0; --y) {
         for(let x = 0; x < arena[y].length; ++x) {
+            
+            //Checking if the row is fully populated
             if(arena[y][x] === 0) {
                 continue outer;
             }
         }
+        
+        //Creating the empty row
         const row = arena.splice(y, 1)[0].fill(0);
         arena.unshift(row);
         ++y;
+        
+        //Counting score
         player.score += rowCount * 10;
         rowCount *= 2;
     }
@@ -46,6 +58,7 @@ function createMatrix(w, h) {
 }
 
 //Creation of pieces of different type
+//Taking increasing numbers and mapping them to color names
 function createPiece(type) {
     if(type === 'T') {
         return [
@@ -226,6 +239,7 @@ function updateScore() {
     document.getElementById("score").innerText = "Your score is: " + player.score;
 }
 
+//Setting the color map of the blocks
 const colors = [
     null,
     'red',
